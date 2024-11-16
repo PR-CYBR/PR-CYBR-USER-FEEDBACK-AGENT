@@ -1,1 +1,16 @@
-# Docker Compose
+version: '3.8'
+services:
+  user-feedback-agent:  # Name of your Agent
+    image: prcybr/pr-cybr-user-feedback-agent:latest  # Correct image name
+    container_name: pr-cybr-user-feedback-agent  # Name of your Agent
+    env_file: .env  # Load environment variables from .env file
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - pr-cybr-net
+    ports:
+      - "8080:80"  # Adjust this port as necessary for your Agent
+networks:
+  pr-cybr-net:
+    driver: bridge
