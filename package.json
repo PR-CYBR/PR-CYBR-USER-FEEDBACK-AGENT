@@ -2,9 +2,9 @@
     "name": "PR-CYBR-INFRA",
     "version": "1.0.0",
     "description": "A Discord bot for managing PR-CYBR nodes and checking statuses.",
-    "main": "src/discord/discord.js",
+    "main": "src/discord.js",
     "scripts": {
-      "start": "node src/discord/discord.js"
+      "start": "node src/discord.js"
     },
     "dependencies": {
       "discord.js": "^14.0.0",

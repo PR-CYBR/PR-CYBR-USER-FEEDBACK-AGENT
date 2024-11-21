@@ -9,7 +9,7 @@ services:
     networks:
       - pr-cybr-net
     ports:
-      - "8080:80"  # Map Nginx port to host
+      - "8080:80"  # Map Nginx port to host if needed
     restart: unless-stopped
 
 networks:

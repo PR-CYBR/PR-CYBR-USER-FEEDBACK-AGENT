@@ -1,5 +1,14 @@
-# Use the official Node.js 16 image as a base
-FROM node:16 as builder
+# Use the official Ubuntu image as a base
+FROM ubuntu:22.04
+
+# Install Node.js and other necessary packages
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get install -y build-essential && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /usr/src/app
@@ -13,17 +22,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Use a lightweight Nginx image
-FROM nginx:alpine
+# Expose the port if needed (not typically needed for a Discord bot)
+# EXPOSE 3000
 
-# Copy built application from the builder stage
-COPY --from=builder /usr/src/app /usr/share/nginx/html
-
-# Copy Nginx configuration file
-COPY config/nginx.conf /etc/nginx/nginx.conf
-
-# Expose the port Nginx will run on
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Command to run the application
+CMD ["npm", "start"]
