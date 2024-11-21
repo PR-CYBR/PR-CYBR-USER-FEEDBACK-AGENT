@@ -1,0 +1,28 @@
+{
+    "name": "PR-CYBR-INFRA",
+    "version": "1.0.0",
+    "description": "A Discord bot for managing PR-CYBR nodes and checking statuses.",
+    "main": "src/discord/discord.js",
+    "scripts": {
+      "start": "node src/discord/discord.js"
+    },
+    "dependencies": {
+      "discord.js": "^14.0.0",
+      "dotenv": "^16.0.0"
+    },
+    "engines": {
+      "node": ">=16.6.0"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/PR-CYBR/PR-CYBR-USER-FEEDBACK-AGENT.git"
+    },
+    "keywords": [
+      "discord",
+      "bot",
+      "node",
+      "status"
+    ],
+    "author": "PR-CYBR",
+    "license": "MIT"
+}

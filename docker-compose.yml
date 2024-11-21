@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  discord-bot:
+    build: .
+    container_name: discord-bot
+    env_file: .env  # Load environment variables from .env file
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - pr-cybr-net
+    ports:
+      - "8080:80"  # Map Nginx port to host
+    restart: unless-stopped
+
+networks:
+  pr-cybr-net:
+    driver: bridge
