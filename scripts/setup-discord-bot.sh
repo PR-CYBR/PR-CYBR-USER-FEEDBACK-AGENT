@@ -29,16 +29,14 @@ if [ ! -f .env ]; then
     read -p "Enter your Discord Client ID: " CLIENT_ID
     read -p "Enter your GitHub Token: " GITHUB_TOKEN
     read -p "Enter your Database URL (PostgreSQL): " DATABASE_URL
-    read -p "Enter your MongoDB Username: " MONGO_INITDB_ROOT_USERNAME
-    read -p "Enter your MongoDB Password: " MONGO_INITDB_ROOT_PASSWORD
+    read -p "Enter your MongoDB URI: " MONGODB_URI
 
     # Write the environment variables to the .env file
     echo "BOT_TOKEN=$BOT_TOKEN" >> .env
     echo "CLIENT_ID=$CLIENT_ID" >> .env
     echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> .env
     echo "DATABASE_URL=$DATABASE_URL" >> .env
-    echo "MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME" >> .env
-    echo "MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD" >> .env
+    echo "MONGODB_URI=$MONGODB_URI" >> .env
 
     echo ".env file created successfully with your credentials."
 else
