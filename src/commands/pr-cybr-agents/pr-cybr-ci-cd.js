@@ -1,27 +1,27 @@
 const axios = require('axios');
 
 module.exports = {
-    name: 'pr-cybr-mgmt-agent',
-    description: 'Manage PR-CYBR management tasks',
+    name: 'pr-cybr-ci-cd-agent',
+    description: 'Manage CI/CD pipelines',
     options: [
         {
             name: 'action',
             type: 3, // STRING
-            description: 'The action to perform (e.g., trigger-workflow, check-status)',
+            description: 'The action to perform (e.g., trigger-pipeline, check-pipeline-status)',
             required: true,
             choices: [
-                { name: 'Trigger Workflow', value: 'trigger-workflow' },
-                { name: 'Check Workflow Status', value: 'check-status' }
+                { name: 'Trigger Pipeline', value: 'trigger-pipeline' },
+                { name: 'Check Pipeline Status', value: 'check-pipeline-status' }
             ],
         },
     ],
     async execute(interaction) {
         const action = interaction.options.getString('action');
-        const repo = 'PR-CYBR/PR-CYBR-MGMT-AGENT';
+        const repo = 'PR-CYBR/PR-CYBR-CI-CD-AGENT';
         const workflowId = '.github/scripts/test-agent.yml';
         const githubToken = process.env.GITHUB_TOKEN;
 
-        if (action === 'trigger-workflow') {
+        if (action === 'trigger-pipeline') {
             try {
                 await axios.post(
                     `https://api.github.com/repos/${repo}/actions/workflows/${workflowId}/dispatches`,
@@ -33,12 +33,12 @@ module.exports = {
                         },
                     }
                 );
-                await interaction.reply('Workflow triggered successfully!');
+                await interaction.reply('CI/CD pipeline triggered successfully!');
             } catch (error) {
-                console.error('Error triggering workflow:', error);
-                await interaction.reply('Failed to trigger the workflow.');
+                console.error('Error triggering pipeline:', error);
+                await interaction.reply('Failed to trigger the CI/CD pipeline.');
             }
-        } else if (action === 'check-status') {
+        } else if (action === 'check-pipeline-status') {
             try {
                 const response = await axios.get(
                     `https://api.github.com/repos/${repo}/actions/runs`,
@@ -50,10 +50,10 @@ module.exports = {
                     }
                 );
                 const latestRun = response.data.workflow_runs[0];
-                await interaction.reply(`Latest workflow run status: ${latestRun.status}`);
+                await interaction.reply(`Latest pipeline run status: ${latestRun.status}`);
             } catch (error) {
-                console.error('Error fetching workflow status:', error);
-                await interaction.reply('Failed to fetch the workflow status.');
+                console.error('Error fetching pipeline status:', error);
+                await interaction.reply('Failed to fetch the pipeline status.');
             }
         } else {
             await interaction.reply('Unknown action.');

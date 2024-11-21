@@ -1,27 +1,27 @@
 const axios = require('axios');
 
 module.exports = {
-    name: 'pr-cybr-mgmt-agent',
-    description: 'Manage PR-CYBR management tasks',
+    name: 'pr-cybr-security-agent',
+    description: 'Run security scans or check scan status',
     options: [
         {
             name: 'action',
             type: 3, // STRING
-            description: 'The action to perform (e.g., trigger-workflow, check-status)',
+            description: 'The action to perform (e.g., run-scan, check-scan-status)',
             required: true,
             choices: [
-                { name: 'Trigger Workflow', value: 'trigger-workflow' },
-                { name: 'Check Workflow Status', value: 'check-status' }
+                { name: 'Run Security Scan', value: 'run-scan' },
+                { name: 'Check Scan Status', value: 'check-scan-status' }
             ],
         },
     ],
     async execute(interaction) {
         const action = interaction.options.getString('action');
-        const repo = 'PR-CYBR/PR-CYBR-MGMT-AGENT';
+        const repo = 'PR-CYBR/PR-CYBR-SECURITY-AGENT';
         const workflowId = '.github/scripts/test-agent.yml';
         const githubToken = process.env.GITHUB_TOKEN;
 
-        if (action === 'trigger-workflow') {
+        if (action === 'run-scan') {
             try {
                 await axios.post(
                     `https://api.github.com/repos/${repo}/actions/workflows/${workflowId}/dispatches`,
@@ -33,12 +33,12 @@ module.exports = {
                         },
                     }
                 );
-                await interaction.reply('Workflow triggered successfully!');
+                await interaction.reply('Security scan triggered successfully!');
             } catch (error) {
-                console.error('Error triggering workflow:', error);
-                await interaction.reply('Failed to trigger the workflow.');
+                console.error('Error triggering security scan:', error);
+                await interaction.reply('Failed to trigger the security scan.');
             }
-        } else if (action === 'check-status') {
+        } else if (action === 'check-scan-status') {
             try {
                 const response = await axios.get(
                     `https://api.github.com/repos/${repo}/actions/runs`,
@@ -50,10 +50,10 @@ module.exports = {
                     }
                 );
                 const latestRun = response.data.workflow_runs[0];
-                await interaction.reply(`Latest workflow run status: ${latestRun.status}`);
+                await interaction.reply(`Latest security scan status: ${latestRun.status}`);
             } catch (error) {
-                console.error('Error fetching workflow status:', error);
-                await interaction.reply('Failed to fetch the workflow status.');
+                console.error('Error fetching scan status:', error);
+                await interaction.reply('Failed to fetch the scan status.');
             }
         } else {
             await interaction.reply('Unknown action.');

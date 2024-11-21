@@ -22,13 +22,31 @@ docker-compose build
 if [ ! -f .env ]; then
     echo "Creating .env file from .env.example..."
     cp .env.example .env
-    echo "Please update the .env file with your Discord bot credentials."
+
+    # Prompt user for environment variables
+    echo "Please enter your Discord bot credentials and other necessary information."
+    read -p "Enter your Discord Bot Token: " BOT_TOKEN
+    read -p "Enter your Discord Client ID: " CLIENT_ID
+    read -p "Enter your GitHub Token: " GITHUB_TOKEN
+    read -p "Enter your Database URL (PostgreSQL): " DATABASE_URL
+    read -p "Enter your MongoDB Username: " MONGO_INITDB_ROOT_USERNAME
+    read -p "Enter your MongoDB Password: " MONGO_INITDB_ROOT_PASSWORD
+
+    # Write the environment variables to the .env file
+    echo "BOT_TOKEN=$BOT_TOKEN" >> .env
+    echo "CLIENT_ID=$CLIENT_ID" >> .env
+    echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> .env
+    echo "DATABASE_URL=$DATABASE_URL" >> .env
+    echo "MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME" >> .env
+    echo "MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD" >> .env
+
+    echo ".env file created successfully with your credentials."
 else
     echo ".env file already exists. Please ensure it contains the correct credentials."
 fi
 
-# Start the Docker container
-echo "Starting the Docker container..."
+# Start the Docker containers
+echo "Starting the Docker containers..."
 docker-compose up -d
 
 # Get the container ID of the running bot
@@ -36,8 +54,7 @@ CONTAINER_ID=$(docker ps -qf "name=discord-bot")
 
 # Check if the container is running
 if [ -n "$CONTAINER_ID" ]; then
-    echo "Container started successfully. Executing into the container..."
-    docker exec -it $CONTAINER_ID /bin/sh
+    echo "Container started successfully. You can now interact with your bot."
 else
     echo "Failed to start the container. Please check the logs for more details."
 fi

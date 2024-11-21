@@ -5,7 +5,6 @@ const { REST, Routes } = require('discord.js');
 // Discord Bot Configuration using environment variables
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
-const GUILD_ID = process.env.GUILD_ID;
 
 // Define the commands for each agent
 const commands = [
@@ -100,36 +99,6 @@ const commands = [
         ],
     },
     {
-        name: 'pr-cybr-security-agent',
-        description: 'Perform security checks',
-        options: [
-            {
-                name: 'action',
-                type: 3, // STRING
-                description: 'The action to perform (e.g., run-test)',
-                required: true,
-                choices: [
-                    { name: 'Run Test Agent', value: 'run-test' }
-                ],
-            },
-        ],
-    },
-    {
-        name: 'pr-cybr-testing-agent',
-        description: 'Run tests',
-        options: [
-            {
-                name: 'action',
-                type: 3, // STRING
-                description: 'The action to perform (e.g., run-test)',
-                required: true,
-                choices: [
-                    { name: 'Run Test Agent', value: 'run-test' }
-                ],
-            },
-        ],
-    },
-    {
         name: 'pr-cybr-ci-cd-agent',
         description: 'Manage CI/CD pipelines',
         options: [
@@ -199,7 +168,7 @@ const rest = new REST({ version: '10' }).setToken(BOT_TOKEN);
         console.log('Started refreshing application (/) commands.');
 
         await rest.put(
-            Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
+            Routes.applicationCommands(CLIENT_ID), // Use global registration
             { body: commands },
         );
 

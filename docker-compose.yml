@@ -11,7 +11,23 @@ services:
     ports:
       - "8080:80"  # Map Nginx port to host if needed
     restart: unless-stopped
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    networks:
+      - pr-cybr-net
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
 
 networks:
   pr-cybr-net:
     driver: bridge
+
+volumes:
+  mongo_data:
