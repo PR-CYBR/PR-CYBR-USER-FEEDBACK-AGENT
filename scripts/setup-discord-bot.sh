@@ -4,6 +4,7 @@
 if ! command -v docker &> /dev/null
 then
     echo "Docker is not installed. Please install Docker and try again."
+    echo "Docker is not installed." > update-containers.txt
     exit 1
 fi
 
@@ -11,6 +12,7 @@ fi
 if ! command -v docker-compose &> /dev/null
 then
     echo "Docker Compose is not installed. Please install Docker Compose and try again."
+    echo "Docker Compose is not installed." > update-containers.txt
     exit 1
 fi
 
@@ -53,6 +55,7 @@ if [ -n "$CONTAINER_ID" ]; then
     echo "Container started successfully. You can now interact with your bot."
 else
     echo "Failed to start the container. Please check the logs for more details."
+    echo "Failed to start the container." > update-containers.txt
 fi
 
 # Get Status of Docker Containers
@@ -80,13 +83,14 @@ if docker exec discord-bot echo "Container is interactive"; then
     echo "To test bot can send message to Discord channel: Use the bot's command in Discord"
 else
     echo "Failed to exec into the container. Attempting to resolve issues by rebuilding containers..."
+    echo "Failed to exec into the container." > update-containers.txt
     # Download and run the build-containers.sh script to rebuild and resolve issues
     BUILD_SCRIPT_URL="https://raw.githubusercontent.com/PR-CYBR/PR-CYBR-INFRASTRUCTURE-AGENT/main/scripts/build-containers.sh"
     TEMP_SCRIPT="./temp-build-containers.sh"
 
     echo "Downloading build-containers.sh from $BUILD_SCRIPT_URL..."
     if curl -o "$TEMP_SCRIPT" -fsSL "$BUILD_SCRIPT_URL"; then
-        bash "$TEMP_SCRIPT"
+        bash "$TEMP_SCRIPT" update-containers.txt
         rm "$TEMP_SCRIPT"  # Clean up the temporary script file
     else
         echo "Failed to download build-containers.sh. Please check the URL or your internet connection."
