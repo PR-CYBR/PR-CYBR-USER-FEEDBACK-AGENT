@@ -16,8 +16,24 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          apt-get update -y
-          apt-get install -y git python3 python3-pip
+          # Retry logic for apt-get operations to handle transient network issues
+          for i in 1 2 3; do
+            echo "Attempt $i: Updating package lists..."
+            apt-get update -y && break || {
+              echo "Update failed, retrying in 5 seconds..."
+              sleep 5
+            }
+          done
+          
+          # Install with retry logic and --fix-missing flag
+          for i in 1 2 3; do
+            echo "Attempt $i: Installing dependencies..."
+            apt-get install -y --fix-missing git python3 python3-pip && break || {
+              echo "Installation failed, retrying in 5 seconds..."
+              sleep 5
+              apt-get update -y
+            }
+          done
 
       - name: Clone repo
         run: |
